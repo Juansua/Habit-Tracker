@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background-color: #0f0f1a;
+    color: #e2e8f0;
+    font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  .card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+  }
+
+  .transition-smooth {
+    transition: all 0.2s ease;
+  }
+
+  .progress-bar-fill {
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .checkbox-anim {
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  }
+
+  .checkbox-anim:active {
+    transform: scale(0.9);
+  }
+}
