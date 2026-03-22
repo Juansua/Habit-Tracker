@@ -1,6 +1,6 @@
 import { today, formatDateSpanish } from '../utils/dates'
 
-export const Header = ({ completedToday, totalHabits, progressPct, activeView, setActiveView }) => {
+export const Header = ({ completedToday, totalHabits, progressPct, activeView, setActiveView, user, onSignOut }) => {
   const todayLabel = formatDateSpanish(today())
 
   return (
@@ -13,9 +13,28 @@ export const Header = ({ completedToday, totalHabits, progressPct, activeView, s
             <h1 className="text-2xl font-bold text-white tracking-tight">Mis Hábitos</h1>
             <p className="text-xs text-slate-400 mt-0.5 capitalize">{todayLabel}</p>
           </div>
-          <div className="text-right">
-            <span className="text-3xl font-bold text-white">{progressPct}%</span>
-            <p className="text-xs text-slate-400">completado hoy</p>
+          <div className="flex items-center gap-3">
+            <div className="text-right">
+              <span className="text-3xl font-bold text-white">{progressPct}%</span>
+              <p className="text-xs text-slate-400">completado hoy</p>
+            </div>
+            {/* Avatar + sign out */}
+            {user && (
+              <button
+                onClick={onSignOut}
+                title="Cerrar sesión"
+                className="flex-shrink-0 w-8 h-8 rounded-full overflow-hidden cursor-pointer transition-smooth hover:ring-2 hover:ring-indigo-500"
+              >
+                {user.user_metadata?.avatar_url ? (
+                  <img src={user.user_metadata.avatar_url} alt="avatar" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-xs font-bold text-white"
+                    style={{ background: 'rgba(99,102,241,0.4)' }}>
+                    {user.email?.[0]?.toUpperCase()}
+                  </div>
+                )}
+              </button>
+            )}
           </div>
         </div>
 
