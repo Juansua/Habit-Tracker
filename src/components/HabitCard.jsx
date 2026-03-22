@@ -11,19 +11,12 @@ export const HabitCard = ({
   const todayStr = today();
   const done = !!completions[`${habit.id}_${todayStr}`];
   const streak = computeCurrentStreak(habit.id, completions);
-  const {
-    ref,
-    style: dragStyle,
-    attributes,
-    listeners,
-    isDragging,
-  } = dragProps;
+  const { ref, style: dragStyle, attributes, handleListeners, isDragging } = dragProps;
 
   return (
     <div
       ref={ref}
       {...attributes}
-      {...listeners}
       className="flex items-center gap-3 px-4 py-3 rounded-xl transition-smooth"
       style={{
         ...dragStyle,
@@ -32,11 +25,25 @@ export const HabitCard = ({
           : "rgba(255,255,255,0.04)",
         border: `1px solid ${done ? habit.color + "44" : "rgba(255,255,255,0.07)"}`,
         opacity: isDragging ? 0.4 : 1,
-        cursor: isDragging ? "grabbing" : ref ? "grab" : "default",
-        touchAction: "none",
         zIndex: isDragging ? 10 : "auto",
       }}
     >
+      {/* Drag handle */}
+      {handleListeners && (
+        <div
+          {...handleListeners}
+          className="shrink-0 flex flex-col gap-0.5 px-0.5 py-1 cursor-grab active:cursor-grabbing"
+          style={{ touchAction: 'none' }}
+        >
+          {[0,1,2].map((i) => (
+            <div key={i} className="flex gap-0.5">
+              <div className="w-0.5 h-0.5 rounded-full" style={{ background: 'rgba(255,255,255,0.2)' }} />
+              <div className="w-0.5 h-0.5 rounded-full" style={{ background: 'rgba(255,255,255,0.2)' }} />
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* Color indicator */}
       <div
         className="w-1 self-stretch rounded-full shrink-0"
@@ -45,7 +52,6 @@ export const HabitCard = ({
 
       {/* Checkbox */}
       <button
-        onPointerDown={(e) => e.stopPropagation()}
         onClick={() => onToggle(habit.id, todayStr)}
         className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center checkbox-anim cursor-pointer"
         style={{
@@ -91,7 +97,6 @@ export const HabitCard = ({
 
       {/* Delete button */}
       <button
-        onPointerDown={(e) => e.stopPropagation()}
         onClick={() => onDelete(habit.id)}
         className="shrink-0 w-6 h-6 flex items-center justify-center rounded-full transition-smooth cursor-pointer hover:opacity-100 opacity-40"
         style={{ color: "#475569" }}

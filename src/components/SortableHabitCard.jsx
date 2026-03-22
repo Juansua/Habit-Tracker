@@ -11,7 +11,7 @@ export const SortableHabitCard = ({ habit, completions, onToggle, onDelete }) =>
     ref: setNodeRef,
     style: { transform: CSS.Transform.toString(transform), transition },
     attributes,
-    listeners,
+    handleListeners: listeners,
     isDragging,
   }
 
