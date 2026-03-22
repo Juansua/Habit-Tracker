@@ -18,6 +18,7 @@ function App() {
     loading: habitsLoading,
     addHabit,
     removeHabit,
+    reorderHabits,
     toggleCompletion,
     completedToday,
     progressPct,
@@ -77,6 +78,7 @@ function App() {
               onToggle={toggleCompletion}
               onDelete={handleDeleteRequest}
               onAdd={addHabit}
+              onReorder={reorderHabits}
             />
           ) : (
             <StatsView

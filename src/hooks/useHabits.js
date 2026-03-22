@@ -29,7 +29,7 @@ export const useHabits = (userId) => {
         .from('habits')
         .select('*')
         .eq('user_id', userId)
-        .order('created_at')
+        .order('position')
 
       const { data: completionsData } = await supabase
         .from('completions')
@@ -52,13 +52,23 @@ export const useHabits = (userId) => {
 
   const addHabit = async (name) => {
     const color = COLORS[habits.length % COLORS.length]
+    const position = habits.length
     const { data, error } = await supabase
       .from('habits')
-      .insert({ name, color, user_id: userId })
+      .insert({ name, color, user_id: userId, position })
       .select()
       .single()
 
     if (!error) setHabits((prev) => [...prev, data])
+  }
+
+  const reorderHabits = async (newHabits) => {
+    setHabits(newHabits)
+    await Promise.all(
+      newHabits.map((h, i) =>
+        supabase.from('habits').update({ position: i }).eq('id', h.id)
+      )
+    )
   }
 
   const removeHabit = async (id) => {
@@ -103,6 +113,7 @@ export const useHabits = (userId) => {
     loading,
     addHabit,
     removeHabit,
+    reorderHabits,
     toggleCompletion,
     completedToday,
     progressPct,
