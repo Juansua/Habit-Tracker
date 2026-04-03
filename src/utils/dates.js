@@ -46,3 +46,24 @@ export const getShortDate = (dateStr) => {
   const date = new Date(dateStr + 'T12:00:00')
   return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })
 }
+
+export const getMonthLabel = (year, month) => {
+  const date = new Date(year, month, 1)
+  return date.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })
+}
+
+// Returns an array of YYYY-MM-DD strings for every day in the month,
+// padded with nulls at the start so day 1 falls on the correct weekday (Mon=0).
+export const getDaysInMonth = (year, month) => {
+  const firstDay = new Date(year, month, 1).getDay()
+  // Convert Sunday-based (0) to Monday-based (0)
+  const leadingNulls = (firstDay + 6) % 7
+  const daysInMonth = new Date(year, month + 1, 0).getDate()
+  const cells = Array(leadingNulls).fill(null)
+  for (let d = 1; d <= daysInMonth; d++) {
+    const m = String(month + 1).padStart(2, '0')
+    const day = String(d).padStart(2, '0')
+    cells.push(`${year}-${m}-${day}`)
+  }
+  return cells
+}

@@ -55,3 +55,9 @@ export const computeTotalCompleted = (habitId, completions) => {
     (k) => k.startsWith(`${habitId}_`) && completions[k]
   ).length
 }
+
+export const computeDayCompletion = (habits, completions, dateStr) => {
+  if (habits.length === 0) return { completed: 0, total: 0, pct: 0 }
+  const completed = habits.filter((h) => !!completions[`${h.id}_${dateStr}`]).length
+  return { completed, total: habits.length, pct: Math.round((completed / habits.length) * 100) }
+}

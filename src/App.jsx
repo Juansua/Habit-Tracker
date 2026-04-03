@@ -5,12 +5,15 @@ import { Header } from './components/Header'
 import { TodayView } from './views/TodayView'
 import { StatsView } from './views/StatsView'
 import { DeleteConfirmModal } from './components/DeleteConfirmModal'
+import { ConfirmModal } from './components/ConfirmModal'
 import { LoginScreen } from './components/LoginScreen'
 
 function App() {
   const { user, loading: authLoading, signInWithGoogle, signOut } = useAuth()
   const [activeView, setActiveView] = useState('hoy')
+  const [statsTab, setStatsTab] = useState('resumen')
   const [habitToDelete, setHabitToDelete] = useState(null)
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
 
   const {
     habits,
@@ -63,7 +66,7 @@ function App() {
           activeView={activeView}
           setActiveView={setActiveView}
           user={user}
-          onSignOut={signOut}
+          onSignOut={() => setShowLogoutConfirm(true)}
         />
 
         <main className="pb-12 pt-2">
@@ -85,6 +88,8 @@ function App() {
               habits={habits}
               completions={completions}
               onToggle={toggleCompletion}
+              statsTab={statsTab}
+              onStatsTabChange={setStatsTab}
             />
           )}
         </main>
@@ -94,6 +99,20 @@ function App() {
         habit={habitToDelete}
         onConfirm={handleDeleteConfirm}
         onCancel={() => setHabitToDelete(null)}
+      />
+      <ConfirmModal
+        open={showLogoutConfirm}
+        scheme="purple"
+        icon={
+          <svg viewBox="0 0 20 20" fill="none" className="w-5 h-5">
+            <path d="M13 3h4v14h-4M9 7l-4 3 4 3M5 10h8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        }
+        title="Cerrar sesión"
+        message="¿Seguro que quieres cerrar sesión? Tus hábitos estarán guardados cuando vuelvas."
+        confirmLabel="Cerrar sesión"
+        onConfirm={() => { setShowLogoutConfirm(false); signOut() }}
+        onCancel={() => setShowLogoutConfirm(false)}
       />
     </div>
   )
